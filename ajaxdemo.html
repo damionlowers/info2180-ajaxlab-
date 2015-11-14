@@ -3,15 +3,16 @@
     <head>
        <script src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
        <script>
-           window.onload = function() {
-           new Ajax.Updater(
-               "content", "request.php",
-              {
-                   method: "get"
-                }
-           
-            );
-            }  
+          // window.onload = function() {
+          //   function ajax(){
+          //     new Ajax.Updater(
+          //       "content", "request.php",
+          //       {
+          //          method: "get"
+          //       }
+          //     );
+          //   }
+          // }  
 /*         new Ajax.Request("https://developers.google.com/speed/libraries/devguide",
                {
                   method: "get",
@@ -19,14 +20,65 @@
               });
            };
 */
-function doSomethingWithTheText(data) {
-  alert(data.responseText);
-}
+          function doSomethingWithTheText(data) {
+            alert(data.responseText);
+          }
+
+          // function AjaxTest()
+          // {
+          //   new Ajax.Updater('content', 'request.php', {
+          //     method: 'get',
+          //     parameters: { q: $F('definition'),
+          //     insertion: Insertion.Bottom
+          //   });
+          // }
+
+          function insertTime(){
+            new Ajax.Request('request.php', {
+              method:'get',
+              onSuccess: function(data) {
+                var response = data.responseXML || "no response text";
+                // alert("Success! \n\n" + response);
+                // $('results').insert(response);
+                myFunction(response);
+              },
+              onFailure: function() { alert('Something went wrong...'); },
+              parameters : {q:$F('mySearch')}
+            });
+          }
+
+          function myFunction(xmlResponse) {
+            var i;
+            var y="";
+            var olList="<ol>";
+            var x = xmlResponse.getElementsByTagName("li");
+            console.log(x);
+            for (i = 0; i <x.length; i++) {
+              // alert(i);
+
+              olList +=  "<li>" +
+              x[i].getElementsByTagName("definition")[0].childNodes[0].nodeValue+"</li>";
+              // alert(olList);
+             
+  
+            }
+            console.log(y);
+            olList = olList+'</ol>';
+             document.getElementById("results").innerHTML = olList;
+            
+            $('results').insert(HTMLCollection[i]);
+          } 
                
        </script>
         <title>Ajax Demo </title>
     </head>
     <body>
-            <div id="content">stuff goes here</div> 
+      <h1>
+        Info 2180 Dictionary Lookup
+      </h1>
+      <input type="search" id="mySearch" placeholder="Search for something..">
+      <input type="button" value="Update" onclick="insertTime();"/>
+      <!-- <button id="search" onclick="AjaxTest();");>Lookup</button> -->
+            <div id="results"></div> 
     </body>
 </html>
